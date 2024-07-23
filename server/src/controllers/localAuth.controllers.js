@@ -32,9 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
     username: username.toLowerCase(),
   });
 
-  const createdUser = await User.findById(user._id).select(
-    "-password"
-  );
+  const createdUser = await User.findById(user._id).select("-password");
 
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registring a user");
@@ -45,8 +43,32 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, createdUser, "User registered successfully"));
 });
 
-const loginUser = asyncHandler(async (req,res) => {
-    const token = req.user.generateJWT();
-})
+const loginUser = asyncHandler(async (req, res) => {
+  const accessToken = req.user.generateAccessToken();
 
-export { registerUser,loginUser };
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, option)
+    .json(new ApiResponse(200, {}, "User logged in successfully"));
+});
+
+// Log out the user
+const logoutUser = asyncHandler(async (req, res) => {
+  // this make the cookie only modified by the server
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", option)
+    .json(new ApiResponse(200, {}, "User logged out"));
+});
+
+export { registerUser, loginUser, logoutUser };

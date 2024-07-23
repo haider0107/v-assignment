@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as JwtStrategy } from "passport-jwt";
 
-import User from "../models/User";
+import { User } from "../models/user.model.js";
 
 const isProduction = process.env.NODE_ENV === "production";
 const secretOrKey = isProduction
@@ -26,7 +26,7 @@ const jwtLogin = new JwtStrategy(
   },
   async (payload, done) => {
     try {
-      const user = await User.findById(payload.id);
+      const user = await User.findById(payload._id);
 
       if (user) {
         done(null, user);

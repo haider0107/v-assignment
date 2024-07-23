@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as PassportLocalStrategy } from "passport-local";
 
-import User from "../models/User";
+import { User } from "../models/user.model.js";
 // import { loginSchema } from "./validators";
 import { signInSchema } from "../schemas/signInSchema.js";
 import { zodErrorHandler } from "../utils/zodError.js";
@@ -14,7 +14,6 @@ const passportLogin = new PassportLocalStrategy(
     passReqToCallback: true,
   },
   async (req, email, password, done) => {
-
     const requestBody = req.body;
 
     const result = signInSchema.safeParse(requestBody);
@@ -26,21 +25,18 @@ const passportLogin = new PassportLocalStrategy(
     }
 
     try {
-      const user = await User.findOne({ email: email.trim() });
+      const user = await User.findOne({ email: email });
       if (!user) {
         return done(null, false, { message: "Email does not exists." });
       }
 
-      user.isPasswordCorrect(password, function (err, isMatch) {
-        if (err) {
-          return done(err);
-        }
-        if (!isMatch) {
-          return done(null, false, { message: "Email or Password incorret" });
-        }
+      const isPasswordValid = await user.isPasswordCorrect(password);
 
-        return done(null, user);
-      });
+      if (!isPasswordValid) {
+        return done(null, false, { message: "Email or Password incorret" });
+      }
+
+      return done(null, user);
     } catch (err) {
       return done(err);
     }

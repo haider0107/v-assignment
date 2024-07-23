@@ -18,14 +18,14 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use(passport.initialize());
-require("./services/jwtStrategy");
-require("./services/googleStrategy");
-require("./services/localStrategy");
+import "./services/jwtStrategy.js";
+// import "./services/googleStrategy.js";
+import "./services/localStrategy.js";
 
 // router imports
-// import userRouter from "./routes/user.routes.js";
+import localAuthRouter from "./routes/localAuth.routes.js";
 
 // routes decleration
-// app.use("/api/v1/users", userRouter);
+app.use("/auth", localAuthRouter);
 
 export { app };

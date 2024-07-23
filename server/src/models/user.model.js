@@ -27,7 +27,7 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String, // Cloudinary
-      required: true,
+    //   required: true,
     },
     password: {
       type: String,
@@ -50,6 +50,11 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+const isProduction = process.env.NODE_ENV === "production";
+const secretOrKey = isProduction
+  ? process.env.JWT_SECRET_PROD
+  : process.env.JWT_SECRET_DEV;
+
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
@@ -58,9 +63,9 @@ userSchema.methods.generateAccessToken = function () {
       username: this.username,
       fullName: this.fullName,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    secretOrKey,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: "12h",
     }
   );
 };
