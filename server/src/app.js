@@ -24,8 +24,10 @@ import "./services/localStrategy.js";
 
 // router imports
 import localAuthRouter from "./routes/localAuth.routes.js";
+import taskRouter from "./routes/task.routes.js";
 
 // routes decleration
 app.use("/auth", localAuthRouter);
+app.use("/tasks", taskRouter);
 
 export { app };

@@ -3,6 +3,7 @@ import { signUpSchema } from "../schemas/signUpSchema.js";
 import { ApiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/apiResponse.js";
+import { zodErrorHandler } from "../utils/zodError.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const requestBody = req.body;
@@ -12,7 +13,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!result.success) {
     let fieldErrorsCombined = zodErrorHandler(result);
 
-    return done(null, false, { message: fieldErrorsCombined });
+    throw new ApiError(409, fieldErrorsCombined);
   }
 
   const { email, password, name, username } = requestBody;
@@ -70,5 +71,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("accessToken", option)
     .json(new ApiResponse(200, {}, "User logged out"));
 });
+
+
 
 export { registerUser, loginUser, logoutUser };

@@ -2,7 +2,6 @@ import passport from "passport";
 import { Strategy as PassportLocalStrategy } from "passport-local";
 
 import { User } from "../models/user.model.js";
-// import { loginSchema } from "./validators";
 import { signInSchema } from "../schemas/signInSchema.js";
 import { zodErrorHandler } from "../utils/zodError.js";
 
