@@ -18,10 +18,12 @@ function Login() {
     setError("");
     setsigninLoading(true);
     try {
-      const { data } = await loginService(userData);
+      const res = await loginService(userData);
 
-      if (data.success) {
-        dispatch(authLogin({ userData: data.data }));
+      console.log(res);
+
+      if (res.data.success) {
+        dispatch(authLogin({ userData: res.data.data }));
         navigate("/");
       }
     } catch (error) {
@@ -33,7 +35,7 @@ function Login() {
   };
 
   const googleLogin = () => {
-    window.open("http://localhost:8000/api/auth/google","_self");
+    window.open("/api/auth/google", "_self");
   };
 
   return (

@@ -32,7 +32,7 @@ function Signup() {
   };
 
   const googleLogin = () => {
-    window.open("http://localhost:8000/api/auth/google", "_self");
+    window.open("/api/auth/google", "_self");
   };
 
   return (
