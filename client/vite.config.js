@@ -6,11 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
-        target: "https://v-assignment-1nad.onrender.com",
-        changeOrigin: true,
-        secure: false,
-      },
+      "/api": "https://v-assignment-1nad.onrender.com",
     },
   },
 });
