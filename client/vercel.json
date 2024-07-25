@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path(.*)",
+      "destination": "https://v-assignment-1nad.onrender.com/:path"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
