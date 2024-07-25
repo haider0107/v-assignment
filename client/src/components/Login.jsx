@@ -5,21 +5,20 @@ import { Button, Input, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { loginService } from "../service/authService";
+import { Spin } from "antd";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
+  const [signinLoading, setsigninLoading] = useState(false);
   const [error, setError] = useState("");
 
   const login = async (userData) => {
     setError("");
-
-    console.log(userData);
+    setsigninLoading(true);
     try {
       const { data } = await loginService(userData);
-
-      console.log(data);
 
       if (data.success) {
         dispatch(authLogin({ userData: data.data }));
@@ -28,7 +27,13 @@ function Login() {
     } catch (error) {
       console.log(error);
       setError(error.message);
+    } finally {
+      setsigninLoading(false);
     }
+  };
+
+  const googleLogin = () => {
+    window.open("http://localhost:8000/api/auth/google","_self");
   };
 
   return (
@@ -37,22 +42,14 @@ function Login() {
         className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
       >
         <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
+          <span className="text-center">
+            <Logo color="" />
           </span>
         </div>
         <h2 className="text-center text-2xl font-bold leading-tight">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-center text-base text-black/60">
-          Don&apos;t have any account?&nbsp;
-          <Link
-            to="/signup"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
+
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
         <form onSubmit={handleSubmit(login)} className="mt-8">
           <div className="space-y-5">
@@ -77,11 +74,32 @@ function Login() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
-              Sign in
-            </Button>
+            {!signinLoading && (
+              <Button type="submit" className="w-full">
+                Sign in
+              </Button>
+            )}
+            {signinLoading && (
+              <div className="text-center w-full">
+                <Spin />
+              </div>
+            )}
           </div>
         </form>
+        <p className="mt-2 text-center text-base text-black/60">
+          Don&apos;t have any account?&nbsp;
+          <Link
+            to="/signup"
+            className="font-medium text-primary transition-all duration-200 hover:underline"
+          >
+            Sign Up
+          </Link>
+        </p>
+        <div className="flex justify-center items-center w-full">
+          <Button className="w-auto mt-2" onClick={googleLogin}>
+            Login with <span className="font-semibold">Google</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

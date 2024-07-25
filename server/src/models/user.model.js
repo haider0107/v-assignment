@@ -27,11 +27,10 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String, // Cloudinary
-    //   required: true,
+      //   required: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
     },
   },
   {

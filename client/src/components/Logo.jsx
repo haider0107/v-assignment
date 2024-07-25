@@ -1,7 +1,12 @@
 import React from "react";
+import { BiTask } from "react-icons/bi";
 
-function Logo({ width = "100px" }) {
-  return <div className="text-yellow-500">Logo</div>;
+function Logo({ color = "white" }) {
+  return (
+    <div className={`text-${color}`}>
+      <BiTask size={40} />
+    </div>
+  );
 }
 
 export default Logo;

@@ -3,9 +3,12 @@ import { Container, Logo, LogoutBtn } from "../index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
+  const authUser = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
 
   const navItems = [
@@ -35,13 +38,23 @@ function Header() {
               <Logo width="70px" />
             </Link>
           </div>
+          {authStatus && (
+            <div className="text-white flex justify-center items-center gap-4">
+              Hi, {authUser?.name}{" "}
+              {authUser?.avatar ? (
+                <Avatar src={authUser.avatar} />
+              ) : (
+                <Avatar icon={<UserOutlined />} />
+              )}
+            </div>
+          )}
           <ul className="flex ml-auto">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>
                   <button
                     onClick={() => navigate(item.slug)}
-                    className="inline-bock px-6 py-2 duration-200 ml-1 bg-blue-100 hover:bg-blue-200 rounded-full"
+                    className="inline-bock px-6 py-2 duration-200 ml-1 bg-blue-100 font-semibold hover:bg-blue-200 rounded-full"
                   >
                     {item.name}
                   </button>

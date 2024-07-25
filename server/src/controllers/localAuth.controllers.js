@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { zodErrorHandler } from "../utils/zodError.js";
 
+// Register user
 const registerUser = asyncHandler(async (req, res) => {
   const requestBody = req.body;
 
@@ -44,6 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, createdUser, "User registered successfully"));
 });
 
+// Login User
 const loginUser = asyncHandler(async (req, res) => {
   const accessToken = req.user.generateAccessToken();
 
@@ -51,11 +53,17 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
+  const userData = {
+    _id: req.user._id,
+    username: req.user.username,
+    email: req.user.email,
+    avatar: req.user?.avatar,
+  };
 
   return res
     .status(200)
     .cookie("accessToken", accessToken, option)
-    .json(new ApiResponse(200, {}, "User logged in successfully"));
+    .json(new ApiResponse(200, userData, "User logged in successfully"));
 });
 
 // Log out the user
@@ -72,6 +80,17 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out"));
 });
 
+// Get current user
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = req.user;
 
+  if (!user) {
+    throw new ApiError(400, "User not found !!!");
+  }
 
-export { registerUser, loginUser, logoutUser };
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User fetched successfully"));
+});
+
+export { registerUser, loginUser, logoutUser, getCurrentUser };

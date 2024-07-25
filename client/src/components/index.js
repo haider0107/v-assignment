@@ -7,6 +7,7 @@ import Login from "./Login";
 import Container from "./Container/Container";
 import Header from "./Header/Header";
 import LogoutBtn from "./Header/LogoutBtn";
+import Board from "./TaskComponent/Board";
 
 export {
   AuthLayout,
@@ -18,4 +19,5 @@ export {
   Container,
   Header,
   LogoutBtn,
+  Board,
 };
