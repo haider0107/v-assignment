@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://v-assignment-1nad.onrender.com/:match*"
+    }
+  ]
+}
